@@ -587,7 +587,14 @@ class BCRegistries:
                 filing_where = 'event_id in (' + event_list + ')'
                 _rows = self.get_bcreg_table(self.other_tables[2], filing_where, '', True, generate_individual_sql)
                 _rows = self.get_bcreg_table(self.other_tables[3], filing_where, '', True, generate_individual_sql)
-                _rows = self.get_bcreg_table(self.other_tables[4], filing_where, '', True, generate_individual_sql)
+                involved_rows = self.get_bcreg_table(self.other_tables[4], filing_where, '', False, generate_individual_sql)
+                for involved in involved_rows:
+                    if involved['corp_num'] is not None:
+                        specific_corps.append(involved['corp_num'])
+
+            # ensure we have a unique list
+            specific_corps = list({s_corp for s_corp in specific_corps})
+            specific_corps_lists = self.split_list(specific_corps, MAX_WHERE_IN)
 
             print('Caching data for corporations ...')
             for corp_nums_list in specific_corps_lists:
@@ -1558,20 +1565,33 @@ class BCRegistries:
             # get "corp involveds" (amalgamations)
             corp['amalgamated'] = []
             corp['amalgamating'] = []
-            amal_sql = "select * from " + self.get_table_prefix() + "corp_involved where corp_num = '" + corp_num + "'"
-            print(amal_sql)
-            amalgamated = self.get_adhoc_query(amal_sql)
-            if 0 < len(amalgamated):
-                corp['amalgamated'] = amalgamated
-            event_id_sql = "select event_id from " + self.get_table_prefix() + "event where corp_num = '" + corp_num + "' and event_typ_cd in (" + AMALGAMATION_TYPES + ")"
-            print(event_id_sql)
+            event_id_sql = "select event_id from " + self.get_table_prefix() + "corp_involved where corp_num = '" + corp_num + "'"
+            #print(event_id_sql)
             event_ids = self.get_adhoc_query(event_id_sql)
             if 0 < len(event_ids):
-                search_event_ids = ','.join([x['event_id'] for x in event_ids])
-                amal_sql = "select * from " + self.get_table_prefix() + "corp_involved where event_id in (" + search_event_ids + ")"
-                print(amal_sql)
+                search_event_ids = ','.join([str(x['event_id']) for x in event_ids])
+                amal_sql = "select * from " + self.get_table_prefix() + "event where event_id in (" + search_event_ids + ")"
+                #print(amal_sql)
+                amalgamated = self.get_adhoc_query(amal_sql)
+                if 0 < len(amalgamated):
+                    for amal in amalgamated:
+                        if amal['corp_num'] is not None:
+                            amal['corp_info'] = self.get_basic_corp_info(amal['corp_num'], False)
+                            amal['start_event'] = self.get_event(amal['corp_num'], amal['event_id'])
+                    corp['amalgamated'] = amalgamated
+            event_id_sql = "select event.event_id from " + self.get_table_prefix() + "event, " + self.get_table_prefix() + "filing where filing.event_id = event.event_id and filing_typ_cd in (" + AMALGAMATION_TYPES + ") and event.corp_num = '" + corp_num + "'"
+            #print(event_id_sql)
+            event_ids = self.get_adhoc_query(event_id_sql)
+            if 0 < len(event_ids):
+                search_event_ids = ','.join([str(x['event_id']) for x in event_ids])
+                amal_sql = "select * from " + self.get_table_prefix() + "corp_involved where event_id in (" + search_event_ids + ") and corp_num is not null"
+                #print(amal_sql)
                 amalgamating = self.get_adhoc_query(amal_sql)
                 if 0 < len(amalgamating):
+                    for amal in amalgamating:
+                        if amal['corp_num'] is not None:
+                            amal['corp_info'] = self.get_basic_corp_info(amal['corp_num'], False)
+                            amal['start_event'] = self.get_event(amal['corp_num'], amal['event_id'])
                     corp['amalgamating'] = amalgamating
 
             return corp

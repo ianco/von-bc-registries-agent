@@ -875,6 +875,15 @@ class EventProcessor:
         return False
 
 
+    # check if we should build a relationship credential for the given amalgamation record
+    def should_generate_amalgamation_credential(self, amalgamation, prev_event, last_event):
+        # include if this record is within the desired event range ...
+        if (prev_event['event_date'] <= amalgamation['start_event']['event_timestmp'] and amalgamation['start_event']['event_timestmp'] <= last_event['event_date']):
+            return True
+
+        return False
+
+
     # generate credentials for the provided corp
     def generate_credentials(self, system_typ_cd, prev_event, last_event, corp_num, corp_info):
         corp_creds = []
@@ -1052,6 +1061,35 @@ class EventProcessor:
                     if party['end_event_id'] is not None and party['end_event']['effective_date'] <= corp_info['current_date']:
                         dba_cred['expiry_date'] = party['effective_end_date']
                     reason_description = self.build_corp_reason_code(party['start_event'])
+                    corp_creds.append(self.build_credential_dict(dba_credential, dba_schema, dba_version, dba_cred['registration_id'], dba_cred, reason_description, dba_cred['effective_date']))
+
+        # generate relationships for amalgamation events
+        if 'amalgamated' in corp_info and 0 < len(corp_info['amalgamated']): 
+            for amalgamated in corp_info['amalgamated']:
+                if self.should_generate_amalgamation_credential(amalgamated, prev_event, last_event):
+                    dba_cred = {}
+                    dba_cred['registration_id'] = self.corp_num_with_prefix(corp_info['corp_typ_cd'], corp_info['corp_num'])
+                    dba_cred['associated_registration_id'] = self.corp_num_with_prefix(amalgamated['corp_info']['corp_typ_cd'], amalgamated['corp_info']['corp_num'])
+                    dba_cred['relationship'] = 'Amalgameted'
+                    dba_cred['relationship_description'] = 'Amalgameted Into'
+                    dba_cred['relationship_status'] = 'ACT'
+                    dba_cred['effective_date'] = amalgamated['start_event']['effective_date']
+                    dba_cred['relationship_status_effective'] = amalgamated['start_event']['effective_date']
+                    reason_description = self.build_corp_reason_code(amalgamated['start_event'])
+                    corp_creds.append(self.build_credential_dict(dba_credential, dba_schema, dba_version, dba_cred['registration_id'], dba_cred, reason_description, dba_cred['effective_date']))
+
+        if 'amalgamating' in corp_info and 0 < len(corp_info['amalgamating']): 
+            for amalgamating in corp_info['amalgamating']:
+                if self.should_generate_amalgamation_credential(amalgamating, prev_event, last_event):
+                    dba_cred = {}
+                    dba_cred['registration_id'] = self.corp_num_with_prefix(corp_info['corp_typ_cd'], corp_info['corp_num'])
+                    dba_cred['associated_registration_id'] = self.corp_num_with_prefix(amalgamating['corp_info']['corp_typ_cd'], amalgamating['corp_info']['corp_num'])
+                    dba_cred['relationship'] = 'Amalgameted'
+                    dba_cred['relationship_description'] = 'Amalgameted From'
+                    dba_cred['relationship_status'] = 'ACT'
+                    dba_cred['effective_date'] = amalgamating['start_event']['effective_date']
+                    dba_cred['relationship_status_effective'] = amalgamating['start_event']['effective_date']
+                    reason_description = self.build_corp_reason_code(amalgamating['start_event'])
                     corp_creds.append(self.build_credential_dict(dba_credential, dba_schema, dba_version, dba_cred['registration_id'], dba_cred, reason_description, dba_cred['effective_date']))
 
         return corp_creds

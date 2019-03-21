@@ -140,21 +140,20 @@ specific_corps = [
 
 with BCRegistries() as bc_registries:
     # get 5 corps for each type in scope (in addition to the above list)
-    #print('select corps for each type')
-    #for corp_type in CORP_TYPES_IN_SCOPE:
-    #    print(corp_type)
-    #    sql = """
-    #            select corp_num
-    #            from bc_registries.corporation
-    #            where corp_typ_cd = '""" + corp_type + """'
-    #            order by corp_num desc
-    #            limit 5
-    #           """
-    #    corps = bc_registries.get_bcreg_sql("corps_by_type", sql, cache=False)
-    #    n_corps = len(corps)
-    #    for i in range(n_corps):
-    #        specific_corps.append(corps[i]['corp_num'])
-    specific_corps = []
+    print('select corps for each type')
+    for corp_type in CORP_TYPES_IN_SCOPE:
+        print(corp_type)
+        sql = """
+                select corp_num
+                from bc_registries.corporation
+                where corp_typ_cd = '""" + corp_type + """'
+                order by corp_num desc
+                limit 5
+               """
+        corps = bc_registries.get_bcreg_sql("corps_by_type", sql, cache=False)
+        n_corps = len(corps)
+        for i in range(n_corps):
+            specific_corps.append(corps[i]['corp_num'])
 
     # get 5 corps for each filing type in scope (in addition to the above list)
     print('select corps for each amalgamation filing')
@@ -165,7 +164,7 @@ with BCRegistries() as bc_registries:
                 from bc_registries.filing
                 where filing_typ_cd = '""" + filing_type + """'
                 order by effective_dt desc
-                limit 25
+                limit 5
                """
         sql2 = """
                 select corp_num

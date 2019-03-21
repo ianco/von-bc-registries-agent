@@ -30,6 +30,9 @@ MIN_START_DATE_TZ = timezone.localize(MIN_START_DATE)
 MAX_END_DATE_TZ   = timezone.localize(MAX_END_DATE)
 DATA_CONVERSION_DATE_TZ = timezone.localize(DATA_CONVERSION_DATE)
 
+AMALGAMATION_TYPES_SCOPE = ['AMALR','AMALV','AMALH','AMLRU','AMLVU','AMLHU','AMLRC',
+                            'AMLVC','AMLHC','AMALX','AMALL','AMALS','SAMLF']
+AMALGAMATION_TYPES = ','.join([("'" + x + "'") for x in AMALGAMATION_TYPES_SCOPE])
 
 def adapt_decimal(d):
     return str(d)
@@ -523,13 +526,14 @@ class BCRegistries:
                     'xpro_type']
     corp_tables =  ['corporation', 
                     'corp_state', 
-                    #'tilma_involved', - not currently used
                     'jurisdiction', 
-                    'corp_name']
+                    'corp_name',
+                    'corp_involved']
     other_tables = ['corp_party', 
                     'event', 
                     'filing',
                     'conv_event',
+                    'corp_involved',
                     'office',
                     'address']
 
@@ -583,6 +587,7 @@ class BCRegistries:
                 filing_where = 'event_id in (' + event_list + ')'
                 _rows = self.get_bcreg_table(self.other_tables[2], filing_where, '', True, generate_individual_sql)
                 _rows = self.get_bcreg_table(self.other_tables[3], filing_where, '', True, generate_individual_sql)
+                _rows = self.get_bcreg_table(self.other_tables[4], filing_where, '', True, generate_individual_sql)
 
             print('Caching data for corporations ...')
             for corp_nums_list in specific_corps_lists:
@@ -592,7 +597,7 @@ class BCRegistries:
                     _rows = self.get_bcreg_table(corp_table, corp_num_where, '', True, generate_individual_sql)
 
                 office_where = 'corp_num in (' + corp_nums_list + ')'
-                office_rows = self.get_bcreg_table(self.other_tables[4], office_where, '', True, generate_individual_sql)
+                office_rows = self.get_bcreg_table(self.other_tables[5], office_where, '', True, generate_individual_sql)
 
                 for office in office_rows:
                     if office['mailing_addr_id'] is not None:
@@ -606,7 +611,7 @@ class BCRegistries:
             for ids_list in addr_ids_lists:
                 addr_list = self.id_where_in(ids_list)
                 address_where = 'addr_id in (' + addr_list + ')'
-                _rows = self.get_bcreg_table(self.other_tables[5], address_where, '', True, generate_individual_sql)
+                _rows = self.get_bcreg_table(self.other_tables[6], address_where, '', True, generate_individual_sql)
 
     # load all bc registries data for the specified corps into our in-mem cache
     def cache_bcreg_code_tables(self, generate_individual_sql=False):
@@ -1549,6 +1554,25 @@ class BCRegistries:
                 row = cur.fetchone()
             cur.close()
             cur = None
+
+            # get "corp involveds" (amalgamations)
+            corp['amalgamated'] = []
+            corp['amalgamating'] = []
+            amal_sql = "select * from " + self.get_table_prefix() + "corp_involved where corp_num = '" + corp_num + "'"
+            print(amal_sql)
+            amalgamated = self.get_adhoc_query(amal_sql)
+            if 0 < len(amalgamated):
+                corp['amalgamated'] = amalgamated
+            event_id_sql = "select event_id from " + self.get_table_prefix() + "event where corp_num = '" + corp_num + "' and event_typ_cd in (" + AMALGAMATION_TYPES + ")"
+            print(event_id_sql)
+            event_ids = self.get_adhoc_query(event_id_sql)
+            if 0 < len(event_ids):
+                search_event_ids = ','.join([x['event_id'] for x in event_ids])
+                amal_sql = "select * from " + self.get_table_prefix() + "corp_involved where event_id in (" + search_event_ids + ")"
+                print(amal_sql)
+                amalgamating = self.get_adhoc_query(amal_sql)
+                if 0 < len(amalgamating):
+                    corp['amalgamating'] = amalgamating
 
             return corp
         except (Exception, psycopg2.DatabaseError) as error:

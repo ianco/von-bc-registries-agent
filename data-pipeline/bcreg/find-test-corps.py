@@ -3,7 +3,7 @@ import psycopg2
 import datetime
 from bcreg.config import config
 from bcreg.eventprocessor import EventProcessor, CORP_TYPES_IN_SCOPE
-from bcreg.bcregistries import BCRegistries, system_type
+from bcreg.bcregistries import BCRegistries, system_type, AMALGAMATION_TYPES_SCOPE
 
 
 specific_corps = [
@@ -140,18 +140,61 @@ specific_corps = [
 
 with BCRegistries() as bc_registries:
     # get 5 corps for each type in scope (in addition to the above list)
-    for corp_type in CORP_TYPES_IN_SCOPE:
-        print(corp_type)
-        sql = """
-                select corp_num
-                from bc_registries.corporation
-                where corp_typ_cd = '""" + corp_type + """'
-                order by corp_num desc
+    #print('select corps for each type')
+    #for corp_type in CORP_TYPES_IN_SCOPE:
+    #    print(corp_type)
+    #    sql = """
+    #            select corp_num
+    #            from bc_registries.corporation
+    #            where corp_typ_cd = '""" + corp_type + """'
+    #            order by corp_num desc
+    #            limit 5
+    #           """
+    #    corps = bc_registries.get_bcreg_sql("corps_by_type", sql, cache=False)
+    #    n_corps = len(corps)
+    #    for i in range(n_corps):
+    #        specific_corps.append(corps[i]['corp_num'])
+    specific_corps = []
+
+    # get 5 corps for each filing type in scope (in addition to the above list)
+    print('select corps for each amalgamation filing')
+    for filing_type in AMALGAMATION_TYPES_SCOPE:
+        print(filing_type)
+        sql1 = """
+                select event_id
+                from bc_registries.filing
+                where filing_typ_cd = '""" + filing_type + """'
+                order by effective_dt desc
+                limit 25
                """
-        corps = bc_registries.get_bcreg_sql("corps_by_type", sql, cache=False)
-        n_corps = min(len(corps), 5)
-        for i in range(n_corps):
-            specific_corps.append(corps[i]['corp_num'])
+        sql2 = """
+                select corp_num
+                from bc_registries.event
+                where event_id in (!EVENTS!)
+               """
+        sql3 = """
+                select corp_num
+                from bc_registries.corp_involved
+                where event_id in (!EVENTS!)
+               """
+        events = bc_registries.get_bcreg_sql("events_by_filing", sql1, cache=False)
+        n_events = len(events)
+        if 0 < n_events:
+            event_ids = ''
+            for i in range(n_events):
+                if i > 0:
+                    event_ids = event_ids + ', '
+                event_ids = event_ids + str(events[i]['event_id'])
+            corp_sql = sql2.replace('!EVENTS!', event_ids)
+            corps = bc_registries.get_bcreg_sql("corps_by_filing", corp_sql, cache=False)
+            n_corps = len(corps)
+            for i in range(n_corps):
+                specific_corps.append(corps[i]['corp_num'])
+            corp_sql = sql3.replace('!EVENTS!', event_ids)
+            corps = bc_registries.get_bcreg_sql("corps_by_filing", corp_sql, cache=False)
+            n_corps = len(corps)
+            for i in range(n_corps):
+                specific_corps.append(corps[i]['corp_num'])
 
     with EventProcessor() as event_processor:
         print("Get last processed event")

@@ -69,6 +69,14 @@ CORP_TYPES_IN_SCOPE = {
     "XS":  "XPRO SOCIETY",
 }
 
+PARTNERSHIP_CORP_TYPES = {
+    "GP":  "PARTNERSHIP",
+    "LL":  "LL PARTNERSHIP",
+    "LP":  "LIM PARTNERSHIP",
+    "XL":  "XPRO LL PARTNR",
+    "XP":  "XPRO LIM PARTNR",
+}
+
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime.datetime):
@@ -851,6 +859,18 @@ class EventProcessor:
 
         return False
 
+    # check for general partnerships
+    def is_partnership(self, party, corp_num, corp_info):
+        if not 'corp_info' in party:
+            return False;
+
+        # check if either company is a partner type
+        for partner_type in PARTNERSHIP_CORP_TYPES:
+            if (corp_info['corp_typ_cd'] == partner_type or party['corp_info']['corp_typ_cd'] == partner_type):
+                return True
+
+        return False
+
     # check if we should build a relationship credential for the given party record
     def should_generate_relationship_credential(self, party, prev_event, last_event, corp_num, corp_info):
         if not 'corp_info' in party:
@@ -868,9 +888,9 @@ class EventProcessor:
             if self.is_owned_sole_prop(party, corp_num, corp_info) or self.is_owner_of_sole_prop(party, corp_num, corp_info):
                 return True
 
-            # TBD check for partnerships and amalgamations
-            #if self.is_partnership() or self.is_amalgamation():
-            #   return True
+            # check for partnerships
+            if self.is_partnership(party, corp_num, corp_info):
+                return True
 
         return False
 
@@ -1048,8 +1068,8 @@ class EventProcessor:
                         if 'business_nme' in party and 0 < len(party['business_nme']):
                             dba_cred['associated_registration_name'] = party['business_nme']
                     else:
-                        dba_cred['relationship'] = 'TBD' # party['']
-                        dba_cred['relationship_description'] = 'TBD' # party['']
+                        dba_cred['relationship'] = 'Partner' 
+                        dba_cred['relationship_description'] = 'Partner' 
                     dba_cred['relationship_status'] = 'ACT'
                     dba_cred['effective_date'] = party['effective_start_date']
 

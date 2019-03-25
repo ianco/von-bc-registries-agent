@@ -154,7 +154,7 @@ with BCRegistries() as bc_registries:
                 from bc_registries.corporation
                 where corp_typ_cd = '""" + corp_type + """'
                 order by corp_num desc
-                limit 5
+                limit 15
                """
         corps = bc_registries.get_bcreg_sql("corps_by_type", sql, cache=False)
         n_corps = len(corps)
@@ -200,6 +200,9 @@ with BCRegistries() as bc_registries:
             n_corps = len(corps)
             for i in range(n_corps):
                 specific_corps.append(corps[i]['corp_num'])
+
+    # ensure we have a unique list
+    specific_corps = list({s_corp for s_corp in specific_corps})
 
     with EventProcessor() as event_processor:
         print("Get last processed event")

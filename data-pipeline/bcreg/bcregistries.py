@@ -811,8 +811,7 @@ class BCRegistries:
                 order by corp_num;"""
         sql2 = """SELECT distinct(corp.corp_num) from """ + BC_REGISTRIES_TABLE_PREFIX + """corporation corp,
                             """ + BC_REGISTRIES_TABLE_PREFIX + """corp_party party
-                         where corp.corp_typ_cd in ('SP','MF')
-                          and corp.corp_num = party.corp_num
+                         where corp.corp_num = party.corp_num
                           and party.party_typ_cd in ('FBO')
                           and party.bus_company_num is not null
                           and party.bus_company_num in ({})"""

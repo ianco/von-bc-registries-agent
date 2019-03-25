@@ -186,6 +186,7 @@ def test_specific_corp_scenario():
             """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
             values
             ('FM8694883', 'CO', 105039871, 0, null, 'TPTPYBIICTYEVFMKKPCF', 'FLOHTOGCRGKGIPWBZHDUZLFZC', null)""",
+            """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
             """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
             """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
             values

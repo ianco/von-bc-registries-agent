@@ -83,6 +83,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('9726376', 'CO', 9149010, 0, null, 'LUVDCNLUVTOLZZSPTECB', 'ORTKM QAEILKXLZNHNI ZPZQL', '0869404')""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -422,6 +423,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('XS3169236', 'CO', 111255070, 1, 111256253, 'GOIYPJFELWOMZCDZZTEV', 'N CGIXAJUQOS AUV YBW WTLT', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -1547,6 +1549,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('XP0920055', 'CO', 104734282, 0, null, 'HBKPALQSLXGBOPVQHSPG', 'TOQBFCVGUYQAZDSQKWCGPAZDL', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -1883,6 +1886,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('4888387', 'CO', 734996, 0, null, 'RRXJCMTGMYEWZIKUJWWQ', 'YJNYWO IFBNJDSLZLUDHYKJ B', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -1982,6 +1986,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('2176257', 'CO', 8980608, 1, null, 'DUMDQDTBXSWXWUINLCBY', 'RMUOOQSRVZGDNCSQBKLWANRYC', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -2147,6 +2152,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('5993202', 'NB', 9225463, 1, null, 'UPVLXQANDQCQPCQJTBNB', 'AJX QNQKENYOIE CFAAHGCKTQ', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -3404,6 +3410,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('XP6038062', 'CO', 104646958, 1, 104646965, 'EZDTGHBVWBSQHHKBOTHZ', 'DZHFDZDDVMNXUOTSDWMKWIXMR', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -4040,6 +4047,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('LP8743499', 'CO', 104647305, 1, null, 'UZTQVFGFBQXTDJRTDDTV', 'VPJHEEXUQROQZKSIYXHRKOTMA', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -4337,6 +4345,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('C4560096', 'CO', 2418166, 0, null, 'NEFZZKSDLKIGLQXRSKYM', 'BNYOFOLUXZKVYLIWEGZQJAVHC', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -4583,6 +4592,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('A2437876', 'CO', 605395, 0, null, 'SXRGPXKAKXECJPYOGGOI', 'RVKEDHPQCRSYEIW POWFGDMCO', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -5264,6 +5274,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('FM5911702', 'CO', 105002229, 0, null, 'YXATZVSXRUOHFZXVCGDW', 'FH KKZODIZDOULZYIBOFJOTHW', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -5582,6 +5593,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('5933742', 'CO', 5495410, 0, null, 'PCGETQIFLRWXLTOPBBUI', 'NCMOZMPIXCVWHIAJTBVNLPGEU', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -6164,6 +6176,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('FM0520672', 'CO', 105137483, 0, null, 'MSGAFTSMLMBUGTAIPRAC', 'TFJOSOFJIKFSALFNA ELADMXB', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -6566,6 +6579,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('S2349228', 'CO', 108637085, 1, null, 'IVRQAMPQDPAUVWFNIWRU', 'EOTNAJOPNMKWBMPLLFENMGUXM', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -7010,6 +7024,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('XP5929434', 'CO', 105244268, 0, null, 'QICXVQXHEDRZFZLCYSNG', 'BVQAJMXOXPOFDVTOFCWNFJBFL', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -7175,6 +7190,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('6090746', 'CO', 5616258, 0, null, 'HOKHUPKBHRCASJUTFIEH', 'VDLXDB EVCJAIQM MBOIRWRRN', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -7271,6 +7287,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('5816769', 'TR', 8984261, 3, null, 'COUSCVIIQVBEFLHIENOU', 'LBNPGL CMUONNSZMSMAAZYVES', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -8477,6 +8494,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('LP4107630', 'CO', 105279045, 0, null, 'VUVCCZOOONSJZYJIHEEE', 'OIJSKCEGBGPAJFJRVDTGXZBVQ', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -8612,6 +8630,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('0958079', 'TR', 7191802, 16, null, 'JVWAEBHTYYKNBUXUYEHE', 'KDWY XPW MNJZ WBXJVBBMMQH', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -8951,6 +8970,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('A9713554', 'NO', 5657561, 0, null, 'AZORODMZTMEKHZTMEVUC', 'CEXCPHUXFOQMPBDSIZNJQVRHQ', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values
@@ -9233,6 +9253,7 @@ sample_history_corps = {
                     """insert into corp_name (corp_num, corp_name_typ_cd, start_event_id, corp_name_seq_num, end_event_id, srch_nme, corp_nme, dd_corp_num)
                     values
                     ('6217522', 'CO', 3603736, 0, null, 'WDDJUZJHMWPTVTYXHOTF', 'CMURXXHXKROBOUQSA WEM OBB', null)""",
+                    """create table if not exists corp_involved (event_id numeric, corp_involve_id numeric, corp_num text, can_jur_typ_cd text, adopted_corp_ind text, home_juri_num text, othr_juri_desc text, foreign_nme text, dd_event_id numeric)""",
                     """create table if not exists office (corp_num text, office_typ_cd text, start_event_id numeric, end_event_id numeric, mailing_addr_id numeric, delivery_addr_id numeric, dd_corp_num text, email_address text)""",
                     """insert into office (corp_num, office_typ_cd, start_event_id, end_event_id, mailing_addr_id, delivery_addr_id, dd_corp_num, email_address)
                     values

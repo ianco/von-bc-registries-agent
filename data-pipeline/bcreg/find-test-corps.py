@@ -136,6 +136,12 @@ specific_corps = [
                     'A0070194',
                     '0338518',
                     '1199242',
+                    '0072808',
+                    '0946908',
+                    '0730909',
+                    '1198849',
+                    '0149514',
+                    '0390058',
                     ]
 
 with BCRegistries() as bc_registries:
@@ -185,12 +191,12 @@ with BCRegistries() as bc_registries:
                     event_ids = event_ids + ', '
                 event_ids = event_ids + str(events[i]['event_id'])
             corp_sql = sql2.replace('!EVENTS!', event_ids)
-            corps = bc_registries.get_bcreg_sql("corps_by_filing", corp_sql, cache=False)
+            corps = bc_registries.get_bcreg_sql("corps_by_filing1", corp_sql, cache=False)
             n_corps = len(corps)
             for i in range(n_corps):
                 specific_corps.append(corps[i]['corp_num'])
             corp_sql = sql3.replace('!EVENTS!', event_ids)
-            corps = bc_registries.get_bcreg_sql("corps_by_filing", corp_sql, cache=False)
+            corps = bc_registries.get_bcreg_sql("corps_by_filing2", corp_sql, cache=False)
             n_corps = len(corps)
             for i in range(n_corps):
                 specific_corps.append(corps[i]['corp_num'])

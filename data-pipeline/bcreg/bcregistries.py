@@ -549,6 +549,7 @@ class BCRegistries:
             print('Caching data for parties and events ...')
             self.generated_sqls = []
             self.generated_corp_nums = {}
+
             # ensure we have a unique list
             specific_corps = list({s_corp for s_corp in specific_corps})
             specific_corps_lists = self.split_list(specific_corps, MAX_WHERE_IN)
@@ -569,6 +570,61 @@ class BCRegistries:
             specific_corps = list({s_corp for s_corp in specific_corps})
             specific_corps_lists = self.split_list(specific_corps, MAX_WHERE_IN)
 
+            # get events once, to map to the corp_involved table
+            event_ids = []
+            for corp_nums_list in specific_corps_lists:
+                corp_nums_list = self.id_where_in(corp_nums_list, True)
+                event_where = 'corp_num in (' + corp_nums_list + ')'
+                event_rows = self.get_bcreg_table(self.other_tables[1], event_where, '', False, generate_individual_sql)
+
+                for event in event_rows:
+                    event_ids.append(str(event['event_id']))
+
+            # ensure we have a unique list
+            event_ids = list({event_id for event_id in event_ids})
+            event_ids_lists = self.split_list(event_ids, MAX_WHERE_IN)
+
+            # find corps "amalgamated from"
+            for ids_list in event_ids_lists:
+                event_list = self.id_where_in(ids_list)
+                filing_where = 'event_id in (' + event_list + ')'
+                involved_rows = self.get_bcreg_table(self.other_tables[4], filing_where, '', False, generate_individual_sql)
+                for involved in involved_rows:
+                    if involved['corp_num'] is not None:
+                        specific_corps.append(involved['corp_num'])
+
+            # ensure we have a unique list
+            specific_corps = list({s_corp for s_corp in specific_corps})
+            specific_corps_lists = self.split_list(specific_corps, MAX_WHERE_IN)
+
+            # now find corps "amalgamated to" - first get event id from corp_involved ...
+            amal_event_ids = []
+            for corp_nums_list in specific_corps_lists:
+                corp_nums_list = self.id_where_in(corp_nums_list, True)
+                event_where = 'corp_num in (' + corp_nums_list + ')'
+                event_rows = self.get_bcreg_table(self.other_tables[4], event_where, '', False, generate_individual_sql)
+
+                for event in event_rows:
+                    amal_event_ids.append(str(event['event_id']))
+
+            # ensure we have a unique list
+            amal_events = list({s_event for s_event in amal_event_ids})
+            amal_events_lists = self.split_list(amal_events, MAX_WHERE_IN)
+
+            # ... now find corp nums from these events
+            for amal_events_list in amal_events_lists:
+                amal_events_list = self.id_where_in(amal_events_list, True)
+                event_where = 'event_id in (' + amal_events_list + ')'
+
+                event_rows = self.get_bcreg_table(self.other_tables[1], event_where, '', False, generate_individual_sql)
+                for event in event_rows:
+                    specific_corps.append(str(event['corp_num']))
+
+            # ensure we have a unique list
+            specific_corps = list({s_corp for s_corp in specific_corps})
+            specific_corps_lists = self.split_list(specific_corps, MAX_WHERE_IN)
+
+            # get events again, to make sure we have all events for all corps and related corps
             event_ids = []
             for corp_nums_list in specific_corps_lists:
                 corp_nums_list = self.id_where_in(corp_nums_list, True)
@@ -582,19 +638,12 @@ class BCRegistries:
             event_ids = list({event_id for event_id in event_ids})
             event_ids_lists = self.split_list(event_ids, MAX_WHERE_IN)
 
+            # now populate some of the event-based caches
             for ids_list in event_ids_lists:
                 event_list = self.id_where_in(ids_list)
                 filing_where = 'event_id in (' + event_list + ')'
                 _rows = self.get_bcreg_table(self.other_tables[2], filing_where, '', True, generate_individual_sql)
                 _rows = self.get_bcreg_table(self.other_tables[3], filing_where, '', True, generate_individual_sql)
-                involved_rows = self.get_bcreg_table(self.other_tables[4], filing_where, '', False, generate_individual_sql)
-                for involved in involved_rows:
-                    if involved['corp_num'] is not None:
-                        specific_corps.append(involved['corp_num'])
-
-            # ensure we have a unique list
-            specific_corps = list({s_corp for s_corp in specific_corps})
-            specific_corps_lists = self.split_list(specific_corps, MAX_WHERE_IN)
 
             print('Caching data for corporations ...')
             for corp_nums_list in specific_corps_lists:
@@ -804,20 +853,7 @@ class BCRegistries:
     # use for initial data load
     def get_unprocessed_corps_data_load(self, last_event_id, last_event_dt, max_event_id, max_event_dt):
         sqls = []
-        # select all company types, not just corps and dba's
-        # keep the old sql's for historical curiosity
-        #sqls.append("""SELECT distinct(corp.corp_num) from """ + BC_REGISTRIES_TABLE_PREFIX + """corporation corp,
-        #                    """ + BC_REGISTRIES_TABLE_PREFIX + """corp_party party
-        #                 where corp.corp_typ_cd in ('SP','MF')
-        #                  and corp.corp_num = party.corp_num
-        #                  and party.party_typ_cd in ('FBO')
-        #                  and party.bus_company_num is not null
-        #                  and party.bus_company_num in 
-        #                  (SELECT corp_num from """ + BC_REGISTRIES_TABLE_PREFIX + """corporation corp, """ + BC_REGISTRIES_TABLE_PREFIX + """corp_type typ
-        #                  where corp.corp_typ_cd = typ.corp_typ_cd and typ.corp_class in ('BC','XPRO'))""")
-        #sqls.append("""SELECT distinct(corp.corp_num) from """ + BC_REGISTRIES_TABLE_PREFIX + """corporation corp, """ + BC_REGISTRIES_TABLE_PREFIX + """corp_type typ
-        #                  where corp.corp_typ_cd = typ.corp_typ_cd and typ.corp_class in ('BC','XPRO')""")
-        
+
         # select *all* corps - we will filter in the next stage
         sqls.append("""SELECT distinct(corp.corp_num) from """ + BC_REGISTRIES_TABLE_PREFIX + """corporation corp """)
 
@@ -850,25 +886,6 @@ class BCRegistries:
     # return unprocessed corporations, based on an event range
     def get_unprocessed_corps(self, last_event_id, last_event_dt, max_event_id, max_event_dt):
         sqls = []
-        # select all company types, not just corps and dba's
-        # keep the old sql's for historical curiosity
-        #sqls.append("""SELECT distinct(corp_num) from """ + BC_REGISTRIES_TABLE_PREFIX + """event
-        #                where event_timestmp > %s and event_timestmp <= %s
-        #                and corp_num in
-        #                (SELECT corp.corp_num from """ + BC_REGISTRIES_TABLE_PREFIX + """corporation corp,
-        #                    """ + BC_REGISTRIES_TABLE_PREFIX + """corp_party party
-        #                 where corp.corp_typ_cd in ('SP','MF')
-        #                  and corp.corp_num = party.corp_num
-        #                  and party.party_typ_cd in ('FBO')
-        #                  and bus_company_num is not null
-        #                  and bus_company_num in 
-        #                  (SELECT corp_num from """ + BC_REGISTRIES_TABLE_PREFIX + """corporation corp, """ + BC_REGISTRIES_TABLE_PREFIX + """corp_type typ
-        #                  where corp.corp_typ_cd = typ.corp_typ_cd and typ.corp_class in ('BC','XPRO')))""")
-        #sqls.append("""SELECT distinct(corp_num) from """ + BC_REGISTRIES_TABLE_PREFIX + """event
-        #                where event_timestmp > %s and event_timestmp <= %s
-        #                and corp_num in
-        #                (SELECT corp.corp_num from """ + BC_REGISTRIES_TABLE_PREFIX + """corporation corp, """ + BC_REGISTRIES_TABLE_PREFIX + """corp_type typ
-        #                  where corp.corp_typ_cd = typ.corp_typ_cd and typ.corp_class in ('BC','XPRO'))""")
 
         # select *all* corps - we will filter in the next stage
         sqls.append("""SELECT distinct(corp_num) from """ + BC_REGISTRIES_TABLE_PREFIX + """event
@@ -1566,12 +1583,10 @@ class BCRegistries:
             corp['amalgamated'] = []
             corp['amalgamating'] = []
             event_id_sql = "select event_id from " + self.get_table_prefix() + "corp_involved where corp_num = '" + corp_num + "'"
-            #print(event_id_sql)
             event_ids = self.get_adhoc_query(event_id_sql)
             if 0 < len(event_ids):
                 search_event_ids = ','.join([str(x['event_id']) for x in event_ids])
                 amal_sql = "select * from " + self.get_table_prefix() + "event where event_id in (" + search_event_ids + ")"
-                #print(amal_sql)
                 amalgamated = self.get_adhoc_query(amal_sql)
                 if 0 < len(amalgamated):
                     for amal in amalgamated:
@@ -1580,12 +1595,10 @@ class BCRegistries:
                             amal['start_event'] = self.get_event(amal['corp_num'], amal['event_id'])
                     corp['amalgamated'] = amalgamated
             event_id_sql = "select event.event_id from " + self.get_table_prefix() + "event, " + self.get_table_prefix() + "filing where filing.event_id = event.event_id and filing_typ_cd in (" + AMALGAMATION_TYPES + ") and event.corp_num = '" + corp_num + "'"
-            #print(event_id_sql)
             event_ids = self.get_adhoc_query(event_id_sql)
             if 0 < len(event_ids):
                 search_event_ids = ','.join([str(x['event_id']) for x in event_ids])
                 amal_sql = "select * from " + self.get_table_prefix() + "corp_involved where event_id in (" + search_event_ids + ") and corp_num is not null"
-                #print(amal_sql)
                 amalgamating = self.get_adhoc_query(amal_sql)
                 if 0 < len(amalgamating):
                     for amal in amalgamating:

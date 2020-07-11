@@ -646,6 +646,10 @@ def handle_credentials(state, message):
     else:
         pass
     if state == "credential_acked":
+        # raise 10% errors
+        do_error = random.randint(1, 100)
+        if do_error <= 10:
+            raise Exception("Fake exception to test error handling: " + message["thread_id"])
         response = {"success": True, "result": message["credential_exchange_id"]}
         add_credential_response(message["credential_exchange_id"], response)
 

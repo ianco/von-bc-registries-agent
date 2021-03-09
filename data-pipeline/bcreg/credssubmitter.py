@@ -35,11 +35,11 @@ from bcreg.rocketchat_hooks import log_error, log_warning, log_info
 CONTROLLER_URL = os.environ.get('CONTROLLER_URL', 'http://localhost:5002')
 NOTIFY_OF_CREDENTIAL_POSTING_ERRORS = os.environ.get('NOTIFY_OF_CREDENTIAL_POSTING_ERRORS', 'false')
 
-CREDS_BATCH_SIZE = int(os.getenv('CREDS_BATCH_SIZE', '3000'))
+CREDS_BATCH_SIZE = int(os.getenv('CREDS_BATCH_SIZE', '300'))
 CREDS_REQUEST_SIZE = int(os.getenv('CREDS_REQUEST_SIZE', '5'))
 MAX_CREDS_REQUESTS = int(os.getenv('MAX_CREDS_REQUESTS', '32'))
 # max time to process (minutes)
-MAX_PROCESSING_MINS = int(os.getenv('MAX_PROCESSING_MINS', '10'))
+MAX_PROCESSING_MINS = int(os.getenv('MAX_PROCESSING_MINS', '1'))
 # how often to report status (# credentials)
 PROCESS_LOOP_REPORT_CT = int(os.getenv('PROCESS_LOOP_REPORT_CT', '100'))
 

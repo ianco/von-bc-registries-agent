@@ -911,6 +911,7 @@ def handle_send_credential(cred_input):
         do_trace = random.randint(1, 100)
         if do_trace <= TRACE_MSG_PCT:
             cred_offer["trace"] = True
+            print("Adding trace to message")
         thread = SendCredentialThread(
             credential_definition_id,
             cred_offer,

@@ -24,7 +24,7 @@ system_type = 'BC_REG'
 def dumpfile(path, filename, data):
     #print(path + path)
     if not os.path.exists(path):
-        os.makedirs(path)    
+        os.makedirs(path)
     text_file = open(path + filename, "w")
     text_file.write(json.dumps(data, indent=4))
     text_file.close()

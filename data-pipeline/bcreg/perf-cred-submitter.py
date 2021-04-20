@@ -19,7 +19,7 @@ import logging
 import random
 
 
-USE_AIOHTTP = True
+USE_AIOHTTP = False
 CRED_COUNT  = 300
 CRED_BATCH  = 32
 CRED_PAGE   = 50
